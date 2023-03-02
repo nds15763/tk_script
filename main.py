@@ -1,34 +1,36 @@
 import uiautomator2 as u2
-import multiprocessing as np
-import subprocess
-import time
+import os,time
+import uiautomator2 as u2
+from multiprocessing import Process,Queue
 import tiktok as tk
 
-def getphonelist():  # 获取手机设备
-    cmd = r'adb devices'  # % apk_file
-    pr = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
-    pr.wait()  # 不会马上返回输出的命令，需要等待
-    out = pr.stdout.readlines()  # out = pr.stdout.read().decode("UTF-8")
-    devices = []
-    for i in (out)[1:-1]:
-        device = str(i).split("\\")[0].split("'")[-1]
-        devices.append(device)
-    return devices  # 手机设备列表
-
-def test_xxx(i):  #执行用例
-    d = u2.connect(getphonelist()[int(i)])  # d = u2.connect('192.168.1.117')#  uiautomator2 连接手机
-    MultiDevice(d)
-
-def MultiDevice( d):  # 功能执行
+def get_devices_serials():
+    devices_list = []
+    fd = os.popen("adb devices")
+    devices_list_src = fd.readlines()
+    fd.close()
+    for device in devices_list_src:
+        if "device\n" in device:
+            device = device.replace("\tdevice\n","")
+            devices_list.append(device)
+    return devices_list
+    
+def worker( serial ):
+    os.system("python -m uiautomator2 init  --serial %s"%serial)
+    d = u2.connect(serial)
+    print(d.info)
+    d.app_start("com.zhiliaoapp.musically")
     t = tk.Tiktok()
     t.startVideo(d)
 
-def main():#多进程
-
-    for i in range(len(getphonelist())):  #有几个设备起几个进程
-        p = np.Process(target=test_xxx, args=(str(i)))
+    
+if __name__ == "__main__":
+    process_list = []
+    serial_list = get_devices_serials()
+    for index in range( len(serial_list) ):
+        p = Process( target=worker, args=( serial_list[index],  ) )
         p.start()
-
-
-if __name__ == '__main__':
-    main()
+        process_list.append(p)
+    for p in process_list:
+        p.join()
+    print("all task done!")
