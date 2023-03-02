@@ -43,6 +43,10 @@ class Tiktok:
         time.sleep(1)
         d.click(500,500)
 
+        print("切换样式")
+        d.click(80,1115)
+        time.sleep(2)
+
         print("点击确定")
         d(text="Done").click()
         time.sleep(2)
@@ -80,7 +84,7 @@ class Tiktok:
             time.sleep(5)
 
         print("落下弹窗")
-        d.click(950, 950)
+        d.click(100, 1000)
         time.sleep(5)
 
         print("点击确定")
@@ -104,6 +108,10 @@ class Tiktok:
         d.long_click(100,300,2)
         time.sleep(1)
         d.click(150,170)
+        
+        print("敲个空格")
+        d.click(530, 2070)
+        time.sleep(2)
 
         for product in post['product_list']:
             print("点击收回键盘")
@@ -138,5 +146,9 @@ class Tiktok:
             d(text="Add").click()
             time.sleep(5)
 
+        print("点击收回键盘")
+        d.click(180, 2226)
+        time.sleep(2)
         print("发出视频")
-        d(text="Post").click()
+        d.click(770,2107)
+        time.sleep(300)
