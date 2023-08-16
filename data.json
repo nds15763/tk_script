@@ -1,0 +1,14 @@
+{
+    "chanpin1":{
+        "_comment":"tp:LR:左右，TB:上下",
+        "sort":["a","b","c","d"],
+        "dict":{
+            "d":"A.mp4",
+            "a":"B.mp4",
+            "b":"C.mp4",
+            "c":"D.mp4"
+        },
+        "speech_video":"3kb.mp4",
+        "tp":"TB"
+    }
+}
